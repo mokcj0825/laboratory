@@ -41,6 +41,5 @@ const signal = time.map(t => Math.sin(2 * Math.PI * 2 * t) + 0.5 * Math.sin(2 * 
 const dftResult = DFT(signal, collectionTimeInMilliseconds);
 console.log("Frequency Components:");
 dftResult.forEach(({ frequency, magnitude, phase, real, image }) => {
-  console.log(`Frequency: ${frequency.toFixed(2)} Hz, Magnitude: ${magnitude.toFixed(2)}, Phase: ${phase.toFixed(2)} rad, 
-  Real (cosine contribution): ${real.toFixed(2)}, Image (sine contribution): ${image.toFixed(2)}`);
+  console.log(`Frequency: ${frequency.toFixed(2)} Hz, Magnitude: ${magnitude.toFixed(2)}, Phase: ${phase.toFixed(2)} rad, Real (cosine contribution): ${real.toFixed(2)}, Image (sine contribution): ${image.toFixed(2)}`);
 });
