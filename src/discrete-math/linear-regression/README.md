@@ -36,11 +36,11 @@ This stands for the relationship of $x$ and $y$ is $y = 2x + 3$
    
     $MSE = \frac{1}{n}\sum_{i=1}^{N} (y_i - \hat{y_i})^2$
 
-    Substitute $\hat{y_i} = m*x_i + b$ into MSE:
+    Substitute $\hat{y_i} = m \cdot x_i + b$ into MSE:
 
-    $MSE = \frac{1}{N} \sum_{i=1}^{N}(y_i - (m*x_i+b))^2$ 
+    $MSE = \frac{1}{N} \sum_{i=1}^{N}(y_i - (m \cdot x_i+b))^2$ 
 
-    Define $(m*x_i+b) = a$, so $MSE = \frac{1}{N} \sum_{i=1}^{N}(y_i - a)^2$ 
+    Define $(m \cdot x_i+b) = a$, so $MSE = \frac{1}{N} \sum_{i=1}^{N}(y_i - a)^2$ 
 
     Now, take the derivative of $MSE$ with respect to $m$:
 
@@ -50,14 +50,14 @@ This stands for the relationship of $x$ and $y$ is $y = 2x + 3$
  
     For outer function, $f(y_1 - a) = (y_i - a)^2$, so $f'(y_1 - a) = 2(y_1 - a)$
 
-      For inner function, $g(m) = y_i - a, a = (m*x_i+b)$, so $g(m) = y_1 - m*x_1 -b$. Then $g(m) = -x_1$
+      For inner function, $g(m) = y_i - a, a = (m \cdot x_i+b)$, so $g(m) = y_1 - m \cdot x_1 -b$. Then $g(m) = -x_1$
 
     By applying chain rule, $\frac{\delta}{\delta m}(y_i - a)^2 = 2(y_1 - a)(-x_1)$ 
     
     Thus,
-   $\frac{\delta MSE}{\delta m} = \frac{1}{N}\sum_{i=1}^{N}2(y_1 - (m*x_i+b))(-x_1)$
+   $\frac{\delta MSE}{\delta m} = \frac{1}{N}\sum_{i=1}^{N}2(y_1 - (m \cdot x_i+b))(-x_1)$
 
-   $\frac{\delta MSE}{\delta m} = -\frac{2}{N}\sum_{i=1}^{N}x_1(y_1 - (m*x_i+b))$
-5. Now we know $(m*x_i+b)$ is prediction. So, the Partial Derivative w.r.t m can be further simplify to sum of -2 * current x * (expected y - prediction).
+   $\frac{\delta MSE}{\delta m} = -\frac{2}{N}\sum_{i=1}^{N}x_1(y_1 - (m \cdot x_i+b))$
+5. Now we know $(m \cdot x_i+b)$ is prediction. So, the Partial Derivative w.r.t m can be further simplify to sum of -2 * current x * (expected y - prediction).
 6. After we get the Partial derivative w.r.t m/b in sum form, we need to decide "next iteration initial value". So, we get the average adjustment. And the "final strength of adjustment", is depended on learningRate. The result decide next "starting point".
 7. After all iterations finished, the `linearRegression` will predict the $m$ and $b$ as output.
