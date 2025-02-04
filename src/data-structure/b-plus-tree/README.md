@@ -30,3 +30,6 @@ Another self-balancing structure that store data.
 3. Because B+ have all values in leaves, so the search no need to search back.
     
     For example: In our example, when we search `13` in B Tree, we should know the node is between [12, 14]. And in B+ Tree, we traverse to 13 (root node), and move down directly under it.
+
+## Why databases prefer B+ instead of B?
+In B+, All data found in leaf node. But in B, some data may exist in stem nodes. We should respect all possibilities, not only as experimenter, this should apply for database system.
