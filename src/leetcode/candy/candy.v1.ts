@@ -1,4 +1,4 @@
-function candy(ratings: number[]): number {
+function candy2(ratings: number[]): number {
   const n = ratings.length;
   const candies = new Array(n).fill(1);
 
@@ -17,4 +17,4 @@ function candy(ratings: number[]): number {
   return candies.reduce((sum, c) => sum + c, 0);
 }
 
-console.log(candy([1, 0, 2]));
+console.log(candy2([1, 0, 2]));
