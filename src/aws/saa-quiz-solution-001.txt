@@ -1,0 +1,80 @@
+AWS SAA-C03 PRACTICE QUIZ SOLUTIONS - DESIGN SECURE ARCHITECTURES
+====================================================================
+
+Question 1: Answer B
+Explanation: SSE-KMS provides full control over encryption keys through AWS KMS, including key policies, audit trails via CloudTrail, and supports automatic annual key rotation. SSE-S3 doesn't provide control over keys, SSE-C requires managing keys outside AWS, and client-side encryption adds unnecessary complexity when SSE-KMS meets all requirements.
+
+---
+
+Question 2: Answer C
+Explanation: AWS WAF (Web Application Firewall) protects web applications from common web exploits like SQL injection and cross-site scripting (XSS). Shield protects against DDoS attacks, GuardDuty is for threat detection, and Security Hub aggregates security findings but doesn't provide active protection.
+
+---
+
+Question 3: Answer A, B
+Explanation: AWS Organizations with SCPs provides centralized policy management across accounts, while AWS Config with conformance packs enables automated compliance checking and provides a comprehensive view of compliance status across multiple accounts. Together, they provide both preventive controls (SCPs) and detective controls (Config).
+
+---
+
+Question 4: Answer B
+Explanation: CloudTrail for S3 data events provides detailed API logging, CloudWatch Logs for centralized log storage, and CloudWatch alarms with SNS for automated alerting. This is a fully managed solution with minimal operational overhead. While Macie is useful for data discovery and protection, CloudTrail is the standard for access logging and meets the requirement most directly.
+
+---
+
+Question 5: Answer B
+Explanation: AWS Secrets Manager is specifically designed for managing database credentials and supports automatic rotation (every 30 days), encryption at rest, and programmatic retrieval. While Parameter Store can store encrypted values, it doesn't provide native automatic rotation for database credentials.
+
+---
+
+Question 6: Answer A, B
+Explanation: Placing RDS in private subnets prevents internet accessibility, and configuring security groups to allow traffic only from the application tier implements the principle of least privilege. While encryption (C) is good practice, the question specifically asks about access control. NACLs (D) are stateless and add unnecessary complexity when security groups suffice. Enhanced Monitoring (E) is for performance, not security.
+
+---
+
+Question 7: Answer A, B, C
+Explanation: Defense-in-depth requires multiple security layers. Security groups (A) provide instance-level security, NACLs (B) provide subnet-level security, and VPC Flow Logs (C) enable traffic monitoring and threat detection. NAT Gateway (D) is for connectivity, not security. PrivateLink (E) is beneficial but not essential for defense-in-depth strategy.
+
+---
+
+Question 8: Answer C
+Explanation: Cross-account IAM roles with AssumeRole provide temporary security credentials, follow the principle of least privilege, and don't require sharing long-term credentials. Sharing IAM credentials (A) violates security best practices, making buckets public (B) is insecure, and bucket ACLs (D) are less granular than IAM policies.
+
+---
+
+Question 9: Answer C
+Explanation: PCI DSS requires encryption of cardholder data during transmission. Application Load Balancer with HTTPS listeners provides TLS encryption for data in transit. HTTP (A) doesn't encrypt data, TCP listeners (B) don't provide automatic TLS termination, and CloudFront with HTTP origin (D) doesn't encrypt traffic between CloudFront and origin.
+
+---
+
+Question 10: Answer B
+Explanation: SCPs provide preventive controls by denying non-compliant API calls before they execute, ensuring instances cannot be launched without encryption. AWS Config (A) is detective, not preventive. Options C and D attempt to fix the issue after launch, which doesn't prevent non-compliant instances from being created.
+
+---
+
+Question 11: Answer B
+Explanation: S3 Object Lock in compliance mode provides WORM (Write Once Read Many) protection that prevents objects from being deleted or overwritten for a specified retention period, even by the root account. Versioning (A) doesn't prevent deletion, bucket policies (C) can be modified by privileged users, and MFA Delete (D) only adds an extra authentication step but doesn't enforce retention.
+
+---
+
+Question 12: Answer C
+Explanation: IAM roles provide temporary security credentials automatically rotated by AWS, eliminating the need to store long-term credentials on instances. Roles are the AWS best practice for granting permissions to applications running on EC2. Options A and D still involve credential management, and B is highly insecure.
+
+---
+
+Question 13: Answer C
+Explanation: AWS Network Firewall is a managed service that provides centralized network traffic filtering and inspection at the VPC level with minimal operational overhead. Third-party appliances (A) require management, VPC Flow Logs (B) provide logging but not active inspection, and NLBs (D) don't inspect traffic for threats.
+
+---
+
+Question 14: Answer B
+Explanation: Amazon GuardDuty is a threat detection service that continuously monitors for malicious activity and unauthorized behavior, including unusual API calls, compromised instances, and reconnaissance attempts. CloudTrail (A) logs API calls but doesn't analyze threats, Config (C) monitors resource configuration compliance, and Security Hub (D) aggregates findings but doesn't perform primary threat detection.
+
+---
+
+Question 15: Answer B
+Explanation: Customer-managed keys in AWS KMS provide full control over encryption keys, and CloudTrail automatically logs all KMS API calls including key usage for audit trails. AWS-managed keys (A) don't provide the same level of control, Config rules (C) monitor compliance but not key usage details, and CloudHSM (D) adds unnecessary complexity and cost when KMS meets the requirements.
+
+---
+
+END OF SOLUTIONS
+

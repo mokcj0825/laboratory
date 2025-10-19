@@ -1,0 +1,634 @@
+AWS SOLUTIONS ARCHITECT ASSOCIATE - DESIGN SECURE ARCHITECTURES
+================================================================================
+
+IAM (IDENTITY AND ACCESS MANAGEMENT)
+================================================================================
+
+IAM Users, Groups, and Roles
+- Users: Individual identities with long-term credentials
+- Groups: Collections of users with shared permissions
+- Roles: Temporary credentials assumed by users, applications, or services
+- Root user: Has complete access; should enable MFA and avoid using for daily tasks
+- IAM is global (not region-specific)
+
+IAM Policies
+- JSON documents defining permissions (Allow/Deny)
+- Policy types: Identity-based, Resource-based, Permission boundaries, SCPs
+- Policy evaluation: Explicit Deny > Explicit Allow > Implicit Deny
+- Managed policies: AWS managed or Customer managed (reusable)
+- Inline policies: Directly attached to a single entity
+- Least privilege principle: Grant minimum permissions required
+
+IAM Best Practices
+- Enable MFA for root and privileged users
+- Use roles instead of hardcoding credentials
+- Rotate credentials regularly
+- Use policy conditions for extra security (IP, MFA, time)
+- Use AWS Organizations for multi-account management
+- Enable CloudTrail for auditing IAM actions
+
+IAM Access Analyzer
+- Analyzes resource policies to identify resources shared with external entities
+- Helps identify unintended access
+- Validates policies against AWS best practices
+
+IAM Credential Report
+- Lists all IAM users and credential status
+- Useful for compliance audits
+- Shows password age, MFA status, access keys
+
+STS (Security Token Service)
+- Provides temporary, limited-privilege credentials
+- Used for cross-account access and federation
+- AssumeRole, AssumeRoleWithWebIdentity, AssumeRoleWithSAML
+- Tokens valid from 15 minutes to 12 hours
+
+Cross-Account Access
+- Use IAM roles with trust policies
+- Resource-based policies (S3, Lambda, SNS, SQS)
+- External ID for third-party access (prevents confused deputy problem)
+
+
+NETWORK SECURITY
+================================================================================
+
+VPC (Virtual Private Cloud)
+- Logically isolated network in AWS
+- CIDR block: /16 to /28 (10.0.0.0/16 is common)
+- Spans all AZs in a region
+- Default VPC has Internet Gateway and public subnets
+
+Subnets
+- Public subnet: Has route to Internet Gateway
+- Private subnet: No direct route to internet
+- Each subnet is in one AZ
+- Reserve 5 IPs per subnet (AWS reserves .0-.3 and .255)
+
+Security Groups (SG)
+- Virtual firewall at instance level
+- Stateful (return traffic automatically allowed)
+- Only ALLOW rules (no explicit deny)
+- Default: All outbound allowed, all inbound denied
+- Can reference other security groups
+- Changes take effect immediately
+- Best practice: Separate SGs for different tiers (web, app, db)
+
+Network ACLs (NACLs)
+- Firewall at subnet level
+- Stateless (must allow return traffic explicitly)
+- Support ALLOW and DENY rules
+- Rules evaluated in number order (lowest first)
+- Default NACL: Allows all inbound/outbound
+- Custom NACL: Denies all by default
+- One NACL per subnet, but NACL can be associated with multiple subnets
+
+Security Groups vs NACLs
+- SG: Instance level, stateful, allow only
+- NACL: Subnet level, stateless, allow and deny
+- Use both for defense in depth
+
+Internet Gateway (IGW)
+- Allows VPC resources to access internet
+- Horizontally scaled, redundant, highly available
+- One IGW per VPC
+- Requires public IP/Elastic IP and route table entry
+
+NAT Gateway
+- Allows private subnet resources to access internet (outbound only)
+- Managed service, highly available within an AZ
+- Requires Elastic IP
+- Created in public subnet
+- For HA: Create NAT Gateway in each AZ
+- NAT Instance (EC2): Legacy, not recommended, requires manual scaling
+
+VPC Endpoints
+- Allows private connection to AWS services without IGW/NAT
+- Interface Endpoint (PrivateLink): ENI with private IP
+- Gateway Endpoint: Route table entry (S3 and DynamoDB only)
+- Reduces data transfer costs and improves security
+
+VPC Peering
+- Connects two VPCs privately
+- Non-transitive (A-B and B-C doesn't mean A-C)
+- No overlapping CIDR blocks
+- Cross-region and cross-account supported
+- Update route tables in both VPCs
+
+AWS PrivateLink
+- Expose services to thousands of VPCs
+- Doesn't require VPC peering, IGW, NAT
+- Most secure way to expose services
+
+VPN (Virtual Private Network)
+- Site-to-Site VPN: Connect on-premises to AWS
+- Virtual Private Gateway: AWS side of VPN
+- Customer Gateway: On-premises side
+- Encrypted connection over public internet
+- Quick to set up (minutes)
+
+AWS Direct Connect
+- Dedicated physical connection (1 or 10 Gbps)
+- More consistent network performance than VPN
+- Reduces bandwidth costs
+- Takes weeks/months to set up
+- Not encrypted by default (use VPN over Direct Connect)
+
+AWS Transit Gateway
+- Connects thousands of VPCs and on-premises networks
+- Hub-and-spoke topology
+- Regional but can peer across regions
+- Simplifies complex network architectures
+
+
+DATA ENCRYPTION
+================================================================================
+
+Encryption at Rest
+- Protects stored data
+- Services: S3, EBS, RDS, DynamoDB, Redshift, etc.
+- Options: AWS managed keys or customer managed keys
+
+Encryption in Transit
+- Protects data during transmission
+- Use SSL/TLS (HTTPS)
+- VPN for site-to-site encryption
+- Services enforce encryption: API Gateway, CloudFront, ELB
+
+KMS (Key Management Service)
+- Managed service for encryption keys
+- Customer Master Keys (CMK): AWS managed, Customer managed, Custom key store
+- Symmetric (AES-256): Most services use this
+- Asymmetric: Public/private key pairs
+- Automatic key rotation for AWS managed CMKs (every 1 year)
+- Manual rotation for customer managed CMKs
+- Envelope encryption: Encrypt data key with CMK
+- Regional service
+- Audit using CloudTrail
+- Key policies control access
+- Integrated with IAM
+
+KMS Key Policies
+- Resource-based policies for CMKs
+- Default: Root user has full access
+- Must explicitly grant access to other users/roles
+- Cross-account access requires both key policy and IAM policy
+
+CloudHSM
+- Hardware Security Module
+- Dedicated hardware (not shared)
+- FIPS 140-2 Level 3 compliance (KMS is Level 2)
+- You manage your own keys
+- Single tenant, runs in your VPC
+- Cluster for HA (multi-AZ)
+- Use cases: Contractual/regulatory requirements, custom key management
+
+S3 Encryption
+- SSE-S3: Server-side encryption with S3 managed keys (AES-256)
+- SSE-KMS: Server-side encryption with KMS keys (audit trail)
+- SSE-C: Server-side encryption with customer-provided keys
+- Client-side encryption: Encrypt before uploading
+- Bucket policies can enforce encryption
+- Default encryption for buckets
+
+EBS Encryption
+- Encrypted volumes, snapshots, and volumes created from snapshots
+- Uses KMS (AES-256)
+- Minimal performance impact
+- Can't change encryption after creation (must copy to new volume)
+- Encryption of data in transit between EC2 and EBS
+
+RDS Encryption
+- At-rest encryption using KMS
+- Must enable at creation time
+- Includes automated backups, snapshots, read replicas
+- Transparent Data Encryption (TDE) for Oracle and SQL Server
+- Can't encrypt existing unencrypted DB (must create new from snapshot)
+
+DynamoDB Encryption
+- Encrypted by default using AWS owned keys
+- Can use AWS managed or customer managed KMS keys
+- Encrypts tables, indexes, streams, backups
+
+
+AWS SECURITY SERVICES
+================================================================================
+
+AWS WAF (Web Application Firewall)
+- Protects web applications from common exploits
+- Layer 7 (Application layer) protection
+- Deploy on: CloudFront, ALB, API Gateway, AppSync
+- Rules: IP addresses, HTTP headers, body, URI strings
+- Protection against: SQL injection, XSS, rate-based rules
+- Web ACLs: Collection of rules
+- Managed rules available from AWS and third parties
+
+AWS Shield
+- DDoS protection service
+- Shield Standard: Free, automatic protection for all AWS customers
+- Shield Advanced: Paid, enhanced protection + 24/7 DDoS response team
+- Shield Advanced features: Cost protection, advanced metrics, DRT support
+- Integrates with WAF, CloudFront, Route 53, Global Accelerator
+
+AWS Firewall Manager
+- Centrally manage firewall rules across accounts
+- Manages: WAF rules, Shield Advanced, Security Groups, Network Firewalls
+- Requires AWS Organizations
+- Policies auto-apply to new resources
+
+Amazon GuardDuty
+- Intelligent threat detection service
+- Uses machine learning to detect anomalies
+- Analyzes: VPC Flow Logs, CloudTrail logs, DNS logs
+- Detects: Cryptocurrency mining, compromised instances, reconnaissance
+- 30-day free trial
+- Findings integrated with EventBridge
+
+Amazon Inspector
+- Automated security assessment service
+- Scans EC2 instances, container images, Lambda functions
+- Identifies: Vulnerabilities, network exposure, deviations from best practices
+- Agent-based (EC2) or agentless (containers)
+- Provides risk scores and remediation steps
+
+Amazon Macie
+- Data security service using machine learning
+- Discovers and protects sensitive data in S3
+- Identifies: PII, PHI, credentials, financial data
+- Provides dashboards and alerts
+- Compliance: GDPR, HIPAA, PCI-DSS
+
+AWS Security Hub
+- Centralized security and compliance dashboard
+- Aggregates findings from: GuardDuty, Inspector, Macie, IAM Access Analyzer
+- Automated compliance checks (CIS, PCI-DSS)
+- Requires AWS Config
+- Cross-region and cross-account views
+
+AWS Config
+- Records and evaluates AWS resource configurations
+- Compliance auditing and security analysis
+- Config rules: Managed or custom
+- Remediation actions (manual or automatic)
+- Tracks configuration changes over time
+- Regional service (can aggregate across regions)
+
+AWS CloudTrail
+- Records API calls and account activity
+- Essential for security auditing and compliance
+- Events: Management events (control plane) and Data events (data plane)
+- Multi-region trails recommended
+- Log file integrity validation
+- Integrate with CloudWatch Logs for real-time monitoring
+- S3 for long-term storage
+- Enabled by default (90-day history)
+
+AWS Systems Manager Session Manager
+- Secure remote access to EC2 instances
+- No need for bastion hosts, SSH keys, or open inbound ports
+- Fully audited and logged
+- IAM-based access control
+- Supports Windows and Linux
+
+AWS Secrets Manager
+- Stores and rotates secrets (passwords, API keys, tokens)
+- Automatic rotation for RDS credentials
+- Fine-grained access control with IAM
+- Encrypts secrets using KMS
+- Cross-account access supported
+- Integration with RDS, Redshift, DocumentDB
+
+AWS Systems Manager Parameter Store
+- Secure storage for configuration data and secrets
+- Free for standard parameters, charge for advanced
+- No automatic rotation (use Lambda)
+- Hierarchical storage
+- Integration with KMS for encryption
+- Version tracking
+
+AWS Certificate Manager (ACM)
+- Provision and manage SSL/TLS certificates
+- Free for use with AWS services
+- Automatic renewal for AWS-managed certificates
+- Integrates with: ELB, CloudFront, API Gateway
+- Can import third-party certificates
+- Regional service (CloudFront uses us-east-1)
+
+AWS Private CA
+- Managed private certificate authority
+- Issue private certificates for internal resources
+- Integrates with ACM
+
+
+S3 SECURITY
+================================================================================
+
+S3 Bucket Policies
+- Resource-based policies (JSON)
+- Grant cross-account access
+- Control based on: Principal, Action, Resource, Condition
+- Can enforce encryption, MFA delete, VPC endpoint access
+
+S3 ACLs (Access Control Lists)
+- Legacy access control (use bucket policies instead)
+- Grant basic permissions to other AWS accounts
+- Object-level and bucket-level ACLs
+
+S3 Block Public Access
+- Four settings to prevent public access
+- Can apply at account or bucket level
+- Overrides ACLs and bucket policies
+- Best practice: Enable unless public access required
+
+S3 Access Points
+- Simplify access management for shared datasets
+- Each access point has its own policy
+- Can restrict to VPC
+- Supports S3 Object Lambda
+
+S3 Object Lock
+- Write-once-read-many (WORM) model
+- Compliance mode: Can't be deleted even by root
+- Governance mode: Special permissions can override
+- Retention period or legal hold
+- Versioning must be enabled
+
+S3 Versioning
+- Keep multiple versions of an object
+- Protection against accidental deletion
+- Can recover deleted objects (delete markers)
+- MFA Delete: Requires MFA to permanently delete
+
+S3 Presigned URLs
+- Temporary access to specific objects
+- Uses creator's credentials
+- Time-limited (seconds to hours)
+- Can be used for downloads or uploads
+
+S3 CORS (Cross-Origin Resource Sharing)
+- Allow web apps in one domain to access S3 in another
+- Configure allowed origins, methods, headers
+
+S3 VPC Endpoint
+- Private connection to S3 from VPC
+- Gateway endpoint (free, uses route tables)
+- Reduces data transfer costs
+- More secure than accessing over internet
+
+
+DATABASE SECURITY
+================================================================================
+
+RDS Security
+- Use Security Groups to control network access
+- Never expose RDS to 0.0.0.0/0 (use bastion or VPN)
+- IAM database authentication (MySQL, PostgreSQL)
+- Encryption at rest using KMS
+- Encryption in transit using SSL/TLS
+- Automated backups are encrypted if DB is encrypted
+- Snapshots can be shared encrypted (copy and re-encrypt)
+
+Aurora Security
+- Same security features as RDS
+- Supports IAM database authentication
+- Encryption at rest (can't disable once enabled)
+- Automated backups, snapshots, replicas are encrypted
+- Aurora Serverless: Accessed through Data API (no direct connection)
+
+DynamoDB Security
+- Access control using IAM policies
+- Fine-grained access control (item and attribute level)
+- Encryption at rest (default)
+- VPC endpoints available
+- Backup and restore features
+- Point-in-time recovery (PITR)
+
+ElastiCache Security
+- Redis AUTH tokens for authentication
+- Redis supports encryption in transit (SSL/TLS)
+- IAM authentication for Redis
+- Security Groups control access
+- No IAM authentication for Memcached
+- No encryption at rest for Memcached
+
+
+COMPLIANCE AND GOVERNANCE
+================================================================================
+
+AWS Artifact
+- Portal for compliance reports and agreements
+- SOC reports, PCI reports, ISO certifications
+- Access AWS compliance documentation
+- Review, accept, and manage agreements (BAA, NDA)
+
+AWS Organizations
+- Centrally manage multiple AWS accounts
+- Consolidated billing
+- Service Control Policies (SCPs): Control maximum permissions
+- Organizational Units (OUs): Group accounts
+- SCPs don't grant permissions (use with IAM)
+- SCPs affect all principals in account (including root)
+
+Service Control Policies (SCPs)
+- JSON policies applied to OUs or accounts
+- Allowlist or denylist strategy
+- Don't affect service-linked roles
+- Management account is not affected by SCPs
+- Use for: Restrict regions, enforce tagging, prevent service usage
+
+AWS Control Tower
+- Set up and govern multi-account AWS environment
+- Automated account provisioning
+- Guardrails: Preventive (SCPs) and Detective (Config rules)
+- Account Factory for standardized accounts
+- Dashboard for compliance status
+
+AWS License Manager
+- Manage software licenses (Microsoft, SAP, Oracle)
+- Track and control license usage
+- Prevent license violations
+
+Tag Policies
+- Standardize tags across organization
+- Enforce tagging compliance
+- Part of AWS Organizations
+
+
+LOGGING AND MONITORING
+================================================================================
+
+CloudWatch
+- Monitoring service for AWS resources and applications
+- Metrics: CPU, network, disk, custom metrics
+- Alarms: Trigger actions based on thresholds
+- Logs: Centralize logs from EC2, Lambda, CloudTrail, etc.
+- Events/EventBridge: Respond to state changes
+- Dashboards: Visualize metrics
+- Retention: Configurable (never expire to 1 day)
+
+CloudWatch Logs Insights
+- Query and analyze log data
+- Purpose-built query language
+- Fast and interactive
+
+VPC Flow Logs
+- Capture IP traffic information for VPC, subnet, or ENI
+- Sent to CloudWatch Logs or S3
+- Use cases: Troubleshoot connectivity, security analysis, compliance
+- Doesn't log: DNS to Route 53, Windows license activation, metadata service
+- Capture accepted, rejected, or all traffic
+
+AWS X-Ray
+- Distributed tracing for applications
+- Visualize application architecture
+- Identify performance bottlenecks
+- Troubleshoot errors
+- Requires instrumentation (SDK)
+
+Amazon EventBridge
+- Serverless event bus
+- Respond to events from AWS services, custom apps, SaaS
+- Route events to targets (Lambda, SNS, SQS, etc.)
+- Schedule events (cron jobs)
+
+
+ADDITIONAL SECURITY CONCEPTS
+================================================================================
+
+Defense in Depth
+- Multiple layers of security controls
+- If one layer fails, others provide protection
+- Example: SG + NACL + WAF + encryption
+
+Principle of Least Privilege
+- Grant minimum permissions required
+- Regularly review and remove unnecessary permissions
+- Use permission boundaries
+
+Security Token Service (STS)
+- Temporary credentials with limited lifetime
+- Used for federation, cross-account access
+- More secure than long-term credentials
+
+Bastion Hosts
+- EC2 instance in public subnet
+- Provides secure access to private instances
+- Minimize attack surface: Small instance, minimal software
+- Consider Systems Manager Session Manager as alternative
+
+AWS Resource Access Manager (RAM)
+- Share AWS resources across accounts
+- Share: Subnets, Transit Gateway, Route 53 Resolver rules
+- No need for duplicate resources
+- Works within AWS Organizations
+
+AWS Single Sign-On (SSO)
+- Centralized access management
+- One login for multiple AWS accounts and apps
+- Integrates with external identity providers
+- Support for SAML 2.0
+
+SAML 2.0 Federation
+- Federate corporate directory (Active Directory)
+- Temporary AWS credentials via STS
+- No need to create IAM users
+- Use AssumeRoleWithSAML
+
+Web Identity Federation
+- Authenticate with Google, Facebook, Amazon
+- Use Cognito or call AssumeRoleWithWebIdentity
+- Cognito recommended (easier)
+
+Amazon Cognito
+- User pools: User directory, authentication
+- Identity pools: Grant AWS credentials
+- Supports MFA, social identity providers
+- User lifecycle management
+
+AWS Directory Service
+- Managed Microsoft Active Directory
+- Simple AD: Small/medium businesses
+- AD Connector: Proxy to on-premises AD
+- Use for: EC2 domain join, SSO, RDS SQL Server
+
+Encryption Key Hierarchy
+- Customer Master Key (CMK) encrypts Data Keys
+- Data Keys encrypt actual data (envelope encryption)
+- CMK never leaves KMS unencrypted
+- Reduces API calls and improves performance
+
+Compliance Programs
+- PCI-DSS: Payment card data
+- HIPAA: Healthcare data
+- SOC 1/2/3: Service organization controls
+- ISO 27001: Information security
+- FedRAMP: US government cloud security
+- GDPR: EU data protection
+
+AWS Shared Responsibility Model
+- AWS: Security OF the cloud (infrastructure)
+  - Physical security, hardware, global infrastructure
+  - Managed service security (RDS, Lambda, S3)
+- Customer: Security IN the cloud
+  - Data encryption, IAM, OS patches, network configuration
+  - Client-side encryption, server-side encryption
+- Varies by service type: IaaS vs PaaS vs SaaS
+
+Network Segmentation
+- Separate subnets for different tiers (web, app, database)
+- Use security groups and NACLs between tiers
+- Minimize lateral movement in case of breach
+
+Incident Response
+- Use CloudTrail for forensics
+- Snapshot compromised instances for analysis
+- Isolate affected resources (change SG rules)
+- Use AWS Lambda for automated responses
+- Document and test incident response procedures
+
+Data Classification
+- Identify sensitivity levels (public, internal, confidential, restricted)
+- Apply appropriate controls based on classification
+- Use Macie to discover sensitive data
+- Tag resources based on data classification
+
+
+EXAM TIPS
+================================================================================
+
+Common Exam Scenarios:
+1. Cross-account access → Use IAM roles
+2. Temporary credentials → Use STS
+3. External authentication → Use federation (SAML, Web Identity, Cognito)
+4. Encrypt data at rest → KMS (or CloudHSM for compliance)
+5. Encrypt data in transit → SSL/TLS, VPN
+6. DDoS protection → Shield + WAF + CloudFront
+7. Web application protection → WAF
+8. Threat detection → GuardDuty
+9. Compliance auditing → Config + CloudTrail
+10. Sensitive data discovery → Macie
+11. Public S3 bucket → Enable S3 Block Public Access
+12. Private AWS service access → VPC Endpoints
+13. On-premises to AWS → VPN (quick) or Direct Connect (dedicated)
+14. Secure remote access to EC2 → Systems Manager Session Manager
+15. Rotate secrets automatically → Secrets Manager
+
+Key Differentiators:
+- Security Groups (stateful) vs NACLs (stateless)
+- KMS (shared, managed) vs CloudHSM (dedicated, FIPS Level 3)
+- VPN (quick, encrypted, over internet) vs Direct Connect (dedicated, not encrypted by default)
+- NAT Gateway (managed) vs NAT Instance (EC2-based, legacy)
+- Interface Endpoint (ENI) vs Gateway Endpoint (route table, S3/DynamoDB only)
+- Secrets Manager (rotation) vs Parameter Store (hierarchical, cheaper)
+- IAM policy (identity-based) vs Resource policy (resource-based)
+- Inspector (vulnerabilities) vs GuardDuty (threat detection) vs Macie (data security)
+
+Remember:
+- Always choose managed services over custom solutions
+- Default to encryption (at rest and in transit)
+- Use IAM roles over access keys
+- Enable MFA for privileged access
+- Implement defense in depth
+- Follow principle of least privilege
+- Use CloudTrail for all accounts
+- Enable VPC Flow Logs for network forensics
+

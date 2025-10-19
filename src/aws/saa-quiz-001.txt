@@ -1,0 +1,159 @@
+AWS SAA-C03 PRACTICE QUIZ - DESIGN SECURE ARCHITECTURES
+========================================================
+
+Question 1:
+A company is migrating its on-premises applications to AWS. The security team requires that all data stored in Amazon S3 must be encrypted at rest. The company wants to maintain full control over the encryption keys and have the ability to rotate them annually. Which solution meets these requirements?
+
+A) Use Amazon S3 server-side encryption with Amazon S3-managed keys (SSE-S3)
+B) Use Amazon S3 server-side encryption with AWS KMS keys (SSE-KMS) and enable automatic key rotation
+C) Use Amazon S3 server-side encryption with customer-provided keys (SSE-C)
+D) Use client-side encryption with AWS KMS customer master keys before uploading to S3
+
+---
+
+Question 2:
+A financial services company runs a web application on Amazon EC2 instances behind an Application Load Balancer. The company needs to protect the application from SQL injection and cross-site scripting attacks. Which AWS service should the solutions architect implement?
+
+A) AWS Shield Standard
+B) Amazon GuardDuty
+C) AWS WAF
+D) AWS Security Hub
+
+---
+
+Question 3:
+A company has multiple AWS accounts and wants to centrally manage security policies and automate security checks across all accounts. The solution must provide a comprehensive view of security and compliance status. Which combination of services should be used? (Choose TWO)
+
+A) AWS Organizations with Service Control Policies (SCPs)
+B) AWS Config with conformance packs
+C) Amazon Inspector
+D) AWS CloudFormation StackSets
+E) AWS Systems Manager
+
+---
+
+Question 4:
+A healthcare company stores patient records in Amazon S3. Compliance requirements mandate that all access to sensitive data must be logged and that unauthorized access attempts must trigger immediate alerts. Which solution meets these requirements with the LEAST operational overhead?
+
+A) Enable S3 server access logging and create a Lambda function to process logs for unauthorized access
+B) Enable AWS CloudTrail for S3 data events, store logs in CloudWatch Logs, and create CloudWatch alarms with SNS notifications
+C) Enable S3 access logging, export to CloudWatch Logs, and use CloudWatch Insights to query for unauthorized access
+D) Use Amazon Macie to monitor S3 buckets and configure alerts for unauthorized access patterns
+
+---
+
+Question 5:
+A company's application requires storing database credentials that must be rotated every 30 days. The credentials should be encrypted at rest and the application should retrieve them programmatically. Which AWS service provides the MOST secure and operationally efficient solution?
+
+A) AWS Systems Manager Parameter Store with SecureString parameters
+B) AWS Secrets Manager with automatic rotation enabled
+C) Amazon S3 with server-side encryption and versioning
+D) AWS KMS with encrypted environment variables in AWS Lambda
+
+---
+
+Question 6:
+A company uses Amazon RDS for MySQL in a VPC. The database contains sensitive customer information and should only be accessible from the application tier EC2 instances. Which combination of actions should the solutions architect take to secure the database? (Choose TWO)
+
+A) Deploy the RDS instance in private subnets
+B) Configure the RDS security group to allow inbound traffic only from the application tier security group
+C) Enable RDS encryption at rest using AWS KMS
+D) Configure a Network ACL to deny all inbound traffic to the database subnet except from the application subnet
+E) Enable RDS Enhanced Monitoring
+
+---
+
+Question 7:
+An e-commerce company wants to implement a defense-in-depth strategy for its VPC. The architecture includes a public subnet for web servers and a private subnet for application servers. Which security measures should be implemented? (Choose THREE)
+
+A) Configure security groups with least privilege rules for each tier
+B) Implement Network ACLs as an additional layer of defense
+C) Enable VPC Flow Logs to monitor network traffic
+D) Use NAT Gateway for outbound internet access from private subnets
+E) Implement AWS PrivateLink for all AWS service access
+
+---
+
+Question 8:
+A solutions architect needs to provide temporary cross-account access to an S3 bucket in Account A for users in Account B. The access should be time-limited and not require creating IAM users in Account A. What is the MOST secure approach?
+
+A) Create an IAM user in Account A with access to the S3 bucket and share the credentials with Account B users
+B) Make the S3 bucket public and use bucket policies to restrict access by IP address
+C) Configure cross-account IAM roles with trust relationships and have Account B users assume the role
+D) Enable S3 bucket ACLs and grant permissions to Account B's root account
+
+---
+
+Question 9:
+A company runs a web application that processes credit card information. The application must comply with PCI DSS requirements. The company needs to ensure that cardholder data is encrypted during transmission. Which approach meets this requirement?
+
+A) Use Application Load Balancer with HTTP listeners
+B) Use Network Load Balancer with TCP listeners
+C) Use Application Load Balancer with HTTPS listeners and install SSL/TLS certificates
+D) Use CloudFront with HTTP origin protocol policy
+
+---
+
+Question 10:
+A company's security policy requires that all Amazon EC2 instances must be launched with encrypted EBS volumes using a specific KMS key. The company wants to prevent non-compliant instances from being launched. How can this be enforced?
+
+A) Create an AWS Config rule to detect non-compliant instances and automatically terminate them
+B) Use AWS Service Control Policies (SCPs) to deny RunInstances API calls that don't specify encryption
+C) Configure AWS Systems Manager to run a script that encrypts all EBS volumes after launch
+D) Use Amazon EventBridge to trigger a Lambda function that enables encryption on newly launched instances
+
+---
+
+Question 11:
+A media company stores video files in Amazon S3. The company wants to ensure that objects cannot be deleted or overwritten for a period of 7 years to meet regulatory compliance requirements. Which solution should be implemented?
+
+A) Enable S3 Versioning and configure a lifecycle policy to prevent deletions
+B) Use S3 Object Lock in compliance mode with a retention period of 7 years
+C) Configure an S3 bucket policy that denies delete operations
+D) Enable MFA Delete on the S3 bucket
+
+---
+
+Question 12:
+A company's application tier runs on EC2 instances that need to access an RDS database, S3 buckets, and DynamoDB tables. The solutions architect must ensure that credentials are never stored on the EC2 instances. What is the MOST secure solution?
+
+A) Store credentials in AWS Secrets Manager and retrieve them at instance launch
+B) Use EC2 user data to pass credentials during instance launch
+C) Attach IAM roles to the EC2 instances with appropriate permissions
+D) Store credentials in AWS Systems Manager Parameter Store and use instance metadata to retrieve them
+
+---
+
+Question 13:
+A company runs a multi-tier application in a VPC. The security team requires that all network traffic between tiers must be inspected for threats. Which solution provides centralized traffic inspection with the LEAST operational overhead?
+
+A) Deploy a third-party firewall appliance in each subnet
+B) Configure VPC Flow Logs and use Amazon Athena to analyze traffic patterns
+C) Use AWS Network Firewall with firewall policies deployed at the VPC level
+D) Deploy Network Load Balancers between each tier with security groups
+
+---
+
+Question 14:
+A financial institution needs to detect and respond to potential security threats across its AWS environment, including unusual API calls, compromised instances, and unauthorized access attempts. Which AWS service should be implemented?
+
+A) AWS CloudTrail
+B) Amazon GuardDuty
+C) AWS Config
+D) AWS Security Hub
+
+---
+
+Question 15:
+A company uses multiple AWS services and needs to ensure that all data at rest is encrypted using company-managed keys. The security team requires detailed audit trails of all key usage. Which solution meets these requirements?
+
+A) Use AWS-managed keys with AWS CloudTrail logging
+B) Create customer-managed keys in AWS KMS and enable CloudTrail logging for KMS events
+C) Use AWS-managed keys with AWS Config rules to monitor encryption
+D) Create customer-managed keys in AWS CloudHSM and use Amazon CloudWatch for monitoring
+
+---
+
+END OF QUIZ
+
+See saa-quiz-solution-001.txt for answers and explanations.
