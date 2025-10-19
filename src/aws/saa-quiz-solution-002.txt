@@ -1,0 +1,80 @@
+AWS SAA-C03 PRACTICE QUIZ SOLUTIONS - DESIGN SECURE ARCHITECTURES (SET 2)
+==========================================================================
+
+Question 1: Answer B
+Explanation: To enforce TLS 1.2 or higher for CloudFront, you must configure the distribution with a custom SSL certificate and set the minimum protocol version to TLSv1.2_2021 (or later) in the Security Policy settings. The default policy may allow older protocols. Option A doesn't enforce TLS version, C only secures origin traffic, and D is not the right tool for protocol enforcement.
+
+---
+
+Question 2: Answer C
+Explanation: Amazon Macie is specifically designed to discover, classify, and protect sensitive data in S3, including PII and PHI. It uses machine learning to automatically identify sensitive data. Inspector is for EC2 vulnerability assessment, Security Hub aggregates findings, and Config monitors resource configuration compliance.
+
+---
+
+Question 3: Answer C
+Explanation: ECS tasks can assume IAM roles defined in the task definition, which provides temporary credentials automatically managed by AWS. This follows AWS best practices for containerized applications. Options A, B, and D all involve credential management which violates the requirement and security best practices.
+
+---
+
+Question 4: Answer B
+Explanation: Amazon GuardDuty is a threat detection service that continuously monitors for malicious activity, including reconnaissance, compromised credentials, and unusual API activity. It provides automated findings without requiring manual configuration. CloudTrail requires manual analysis, Config monitors compliance not threats, and Detective is for investigation after threats are detected.
+
+---
+
+Question 5: Answer B
+Explanation: A VPC Gateway endpoint for S3 allows EC2 instances to access S3 privately within the AWS network without traversing the internet. NAT Gateway (A) routes traffic to the internet, Transfer Acceleration (C) uses internet edge locations, and PrivateLink (D) is used for interface endpoints, not S3 gateway endpoints.
+
+---
+
+Question 6: Answer A, B
+Explanation: CloudTrail logs API calls to S3 (A), and S3 Object Lock in compliance mode (B) ensures logs cannot be deleted or modified for the specified retention period (10 years), providing tamper-proof storage. MFA Delete (C) adds protection but doesn't prevent root account deletion. CloudWatch Logs (D) is for short-term analysis, and Artifact (E) is for AWS compliance reports, not customer logs.
+
+---
+
+Question 7: Answer B
+Explanation: AWS Directory Service for Microsoft Active Directory can integrate with an on-premises or cloud-based RADIUS server to enable MFA for directory users. This allows centralized MFA enforcement. Option A requires separate IAM users, C is for application user pools, and D would require migrating to SSO which may not be desired.
+
+---
+
+Question 8: Answer B
+Explanation: A NAT Gateway deployed in a public subnet allows instances in private subnets to initiate outbound connections to the internet while remaining unreachable from the internet. The private subnet route table must point internet-bound traffic (0.0.0.0/0) to the NAT Gateway. An internet gateway (A) would expose instances, VPC peering (C) doesn't provide internet access, and security groups (D) alone don't route traffic.
+
+---
+
+Question 9: Answer B
+Explanation: An organization trail in AWS Organizations automatically logs all accounts to a centralized S3 bucket, and Object Lock prevents deletion. This is the most efficient and secure centralized logging solution. CloudWatch Logs subscriptions (A) add complexity, Config aggregator (C) doesn't collect CloudTrail logs, and S3 replication (D) requires configuration in each account and doesn't prevent deletion from source.
+
+---
+
+Question 10: Answer B
+Explanation: Amazon Cognito Identity Pools (Federated Identities) provides temporary AWS credentials to authenticated and unauthenticated (guest) users, with fine-grained access control to AWS resources. IAM users (A) require manual management, Directory Service (C) is for enterprise directory integration, and SSO (D) is for workforce identity, not application users.
+
+---
+
+Question 11: Answer B
+Explanation: Security groups should reference other security groups and allow only necessary ports between tiers. For example, the web tier security group allows traffic from the internet on ports 80/443, and the application tier security group allows traffic only from the web tier security group on required ports. This implements least privilege at the network layer. NACLs (A) add unnecessary complexity, single security groups (C) don't provide separation, and allowing all VPC traffic (D) violates least privilege.
+
+---
+
+Question 12: Answer C
+Explanation: SSE-KMS with customer managed keys (CMK) provides full control over key lifecycle, including immediate disabling if compromised. You can also track all key usage via CloudTrail. SSE-S3 (A) uses Amazon-managed keys without customer control, AWS managed keys (B) are managed by AWS services, and client-side encryption (D) adds operational complexity and requires secure on-premises key storage.
+
+---
+
+Question 13: Answer A
+Explanation: IAM policies can include conditions using the aws:SourceIp key to restrict access based on IP address. This can be applied to users, groups, or roles. Permission boundaries (B) limit maximum permissions, SCPs (C) apply to entire accounts/OUs, and security groups (D) control network access, not IAM permissions.
+
+---
+
+Question 14: Answer B
+Explanation: Deploying Lambda in a VPC with VPC endpoints (gateway or interface endpoints) allows the function to access AWS services privately without internet traversal. NAT Gateway (A) routes traffic to the internet, Lambda@Edge (C) is for CloudFront integration, and execution roles (D) control permissions, not network routing.
+
+---
+
+Question 15: Answer A, C
+Explanation: AWS Config can detect non-compliant resources and trigger automatic remediation actions using Systems Manager Automation documents. Config rules identify compliance violations, and SSM Automation provides the remediation logic (like enabling S3 encryption). EventBridge (B) can trigger actions but requires Config for compliance detection. CloudFormation drift (D) detects stack changes, and Inspector (E) is for vulnerability assessment.
+
+---
+
+END OF SOLUTIONS
+

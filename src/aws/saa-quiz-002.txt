@@ -1,0 +1,159 @@
+AWS SAA-C03 PRACTICE QUIZ - DESIGN SECURE ARCHITECTURES (SET 2)
+================================================================
+
+Question 1:
+A company hosts a web application on AWS that handles sensitive financial data. The security team wants to ensure that all data in transit between users and the application is encrypted using TLS 1.2 or higher. The application uses CloudFront for content delivery. Which configuration should be implemented?
+
+A) Create a CloudFront distribution with the default viewer protocol policy
+B) Configure CloudFront with a custom SSL certificate and set the minimum protocol version to TLSv1.2_2021 in the viewer certificate settings
+C) Enable HTTPS only on the origin Application Load Balancer
+D) Configure AWS WAF to block requests that don't use TLS 1.2
+
+---
+
+Question 2:
+A healthcare organization needs to implement a solution that automatically discovers and classifies sensitive data stored in Amazon S3 buckets, including personally identifiable information (PII) and protected health information (PHI). Which AWS service should be used?
+
+A) Amazon Inspector
+B) AWS Security Hub
+C) Amazon Macie
+D) AWS Config
+
+---
+
+Question 3:
+A company runs containerized applications on Amazon ECS with Fargate. The containers need to access AWS services like DynamoDB and S3. The security team requires that no credentials should be hardcoded or stored in the container images. What is the MOST secure solution?
+
+A) Store credentials in environment variables passed to the container at runtime
+B) Create an IAM user and store credentials in AWS Secrets Manager, then retrieve them in the container
+C) Assign an IAM role to the ECS task definition
+D) Use AWS Systems Manager Parameter Store to store credentials and retrieve them using the AWS SDK
+
+---
+
+Question 4:
+A company's AWS account was recently compromised, and unauthorized API calls were made. The security team needs to implement a solution to detect similar threats in the future, including reconnaissance attempts, compromised credentials, and unusual API activity. The solution should provide automated findings. Which service should be implemented?
+
+A) AWS CloudTrail with CloudWatch Logs Insights
+B) Amazon GuardDuty
+C) AWS Config with custom rules
+D) Amazon Detective
+
+---
+
+Question 5:
+An application running on EC2 instances needs to access objects in an S3 bucket. The security team requires that traffic between the EC2 instances and S3 should not traverse the internet. Which solution meets this requirement?
+
+A) Use a NAT Gateway to route S3 traffic privately
+B) Create a VPC endpoint for S3 (Gateway endpoint)
+C) Enable S3 Transfer Acceleration
+D) Configure AWS PrivateLink for S3
+
+---
+
+Question 6:
+A financial services company must ensure that all API calls made in their AWS account are logged for audit purposes. The logs must be tamper-proof and retained for 10 years. Which combination of actions should be taken? (Choose TWO)
+
+A) Enable AWS CloudTrail and store logs in an S3 bucket
+B) Enable S3 Object Lock in compliance mode on the CloudTrail S3 bucket
+C) Enable MFA Delete on the CloudTrail S3 bucket
+D) Configure CloudWatch Logs to store all API calls
+E) Use AWS Artifact to store compliance logs
+
+---
+
+Question 7:
+A company uses AWS Directory Service for Microsoft Active Directory to manage user authentication. The company wants to enable multi-factor authentication (MFA) for all users accessing AWS resources. Which solution should be implemented?
+
+A) Enable MFA in AWS IAM for all users
+B) Configure AWS Directory Service to integrate with an on-premises RADIUS server that supports MFA
+C) Use Amazon Cognito with MFA enabled
+D) Configure AWS Single Sign-On with MFA requirements
+
+---
+
+Question 8:
+A solutions architect is designing a secure architecture for a multi-tier application. The application tier in private subnets needs to download software patches from the internet but should not be directly accessible from the internet. Which solution provides secure outbound internet access?
+
+A) Attach an internet gateway to the private subnets
+B) Deploy a NAT Gateway in a public subnet and update the private subnet route table
+C) Use VPC peering to route traffic through a public subnet
+D) Configure security groups to allow outbound internet traffic
+
+---
+
+Question 9:
+A company wants to implement a centralized logging solution for all AWS CloudTrail logs from multiple AWS accounts. The logs must be stored in a single location and protected from deletion. Which architecture should be implemented?
+
+A) Enable CloudTrail in each account and aggregate logs using CloudWatch Logs subscriptions
+B) Create an organization trail in AWS Organizations that logs all accounts to a central S3 bucket with Object Lock enabled
+C) Use AWS Config aggregator to collect CloudTrail logs from all accounts
+D) Configure each account to replicate CloudTrail logs to a central S3 bucket using S3 replication
+
+---
+
+Question 10:
+A company's application needs to authenticate users and provide temporary AWS credentials to access specific S3 buckets based on their identity. The application supports both authenticated users and guest access. Which AWS service provides this capability?
+
+A) AWS IAM with IAM users
+B) Amazon Cognito Identity Pools (Federated Identities)
+C) AWS Directory Service
+D) AWS Single Sign-On
+
+---
+
+Question 11:
+A company runs a web application that must comply with the principle of least privilege. The application has a web tier, application tier, and database tier in separate security groups. How should security group rules be configured?
+
+A) Allow all traffic between all tiers and restrict based on Network ACLs
+B) Configure each security group to allow traffic only from the security group of the previous tier on required ports
+C) Use a single security group for all tiers with rules based on instance IDs
+D) Allow all internal VPC traffic and use IAM policies to restrict access
+
+---
+
+Question 12:
+A healthcare company stores medical images in Amazon S3. Compliance regulations require that all data must be encrypted at rest using keys that can be disabled immediately if compromised. The company must maintain complete control over key lifecycle. Which encryption solution should be used?
+
+A) SSE-S3 with Amazon-managed keys
+B) SSE-KMS with AWS managed keys
+C) SSE-KMS with customer managed keys (CMK)
+D) Client-side encryption with customer-managed keys stored on-premises
+
+---
+
+Question 13:
+A company wants to restrict access to its AWS resources based on the source IP address. Users should only be able to access AWS resources when connecting from the corporate office network. Which IAM feature should be used?
+
+A) IAM policies with aws:SourceIp condition key
+B) IAM permission boundaries
+C) AWS Organizations Service Control Policies
+D) Security groups with IP whitelist
+
+---
+
+Question 14:
+A company has a Lambda function that processes sensitive customer data. The security team requires that all network traffic from the Lambda function should remain within the AWS network and not traverse the internet when accessing AWS services. What should be configured?
+
+A) Deploy the Lambda function in a VPC with NAT Gateway
+B) Deploy the Lambda function in a VPC with VPC endpoints for the required AWS services
+C) Enable Lambda@Edge to process traffic at edge locations
+D) Configure Lambda execution role with VPC access policies
+
+---
+
+Question 15:
+A solutions architect needs to implement a solution to automatically remediate non-compliant resources. For example, if an S3 bucket is created without encryption enabled, it should automatically be configured to enable encryption. Which combination of services provides this capability? (Choose TWO)
+
+A) AWS Config with custom remediation actions
+B) Amazon EventBridge rules
+C) AWS Systems Manager Automation documents
+D) AWS CloudFormation drift detection
+E) Amazon Inspector
+
+---
+
+END OF QUIZ
+
+See saa-quiz-solution-002.txt for answers and explanations.
+
