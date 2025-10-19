@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+.env.command
+.env.query
+*.log
+.DS_Store
+

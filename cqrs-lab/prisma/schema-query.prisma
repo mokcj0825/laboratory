@@ -1,0 +1,41 @@
+// Query Database Schema (读库)
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client-query"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 用户表 - Query Side (可以添加额外的索引优化查询)
+model User {
+  id        String   @id
+  email     String   @unique
+  name      String
+  createdAt DateTime
+  updatedAt DateTime
+  posts     Post[]
+
+  @@index([email])
+  @@index([createdAt])
+}
+
+// 文章表 - Query Side (可以添加额外的索引优化查询)
+model Post {
+  id        String   @id
+  title     String
+  content   String
+  published Boolean
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime
+  updatedAt DateTime
+
+  @@index([authorId])
+  @@index([published])
+  @@index([createdAt])
+  @@index([title])
+}
+

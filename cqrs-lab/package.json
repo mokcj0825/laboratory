@@ -1,0 +1,35 @@
+{
+  "name": "cqrs-lab",
+  "version": "1.0.0",
+  "description": "Database-level CQRS experiment with Prisma and PostgreSQL",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:push:command": "dotenv -e .env.command -- prisma db push --schema=./prisma/schema-command.prisma",
+    "prisma:push:query": "dotenv -e .env.query -- prisma db push --schema=./prisma/schema-query.prisma",
+    "prisma:push": "npm run prisma:push:command && npm run prisma:push:query",
+    "prisma:studio:command": "dotenv -e .env.command -- prisma studio --schema=./prisma/schema-command.prisma",
+    "prisma:studio:query": "dotenv -e .env.query -- prisma studio --schema=./prisma/schema-query.prisma"
+  },
+  "keywords": ["cqrs", "prisma", "postgresql"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^5.7.0",
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1",
+    "dotenv-cli": "^7.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.5",
+    "prisma": "^5.7.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  }
+}
+

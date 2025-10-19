@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Command Database (写库)
+  postgres-command:
+    image: postgres:16-alpine
+    container_name: cqrs-command-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: command_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - command-data:/var/lib/postgresql/data
+    networks:
+      - cqrs-network
+
+  # Query Database (读库)
+  postgres-query:
+    image: postgres:16-alpine
+    container_name: cqrs-query-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: query_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - query-data:/var/lib/postgresql/data
+    networks:
+      - cqrs-network
+
+volumes:
+  command-data:
+  query-data:
+
+networks:
+  cqrs-network:
+    driver: bridge
+
