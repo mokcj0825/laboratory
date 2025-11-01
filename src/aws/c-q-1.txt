@@ -1,0 +1,21 @@
+记录562：
+错误根源：误将DynamoDb的端点类型与其他服务，例如KMS，SNS混淆，认为它使用Interface Endpoint。
+核心概念:DynamDb使用Gateway Endpoint，它是一种轻量级，免费的架构，通过直接修改VPC的路由表来实现私有访问，无需创建ENI。
+决策规划：当需要从VPC内私有访问的服务是S3或Dynamo DB时，立刻锁定Gateway Endpoint。
+配置操作：创建Gateway Endpoint，更新相关子网的路由表。
+架构原则：此方案无需NAT网关费用，没有Interface Endpoint的费用，流量也不需要经过公网。
+
+记录860：
+错误根源：类似于#562，误认为S3适用通用的Interface Endpoint模式。
+核心概念：S3和DynamoDB共享Gateway Endpoint架构，这是AWS为这两个极高流量，存储核心服务设计的特有关联模式。
+决策规划：S3=>Gateway Endpoint，这是需要形成条件反射的关联对。
+架构对比：Gateway Endpoint，只针对S3和DynamoDB，其他服务均为Interface Endpoint。
+架构原则：除了安全和成本，AWS会提供其保障性，也由于不需要管理ENI或安全组，架构也相对简单。
+
+记录795：
+错误根源：可能对AWS专用HPC服务的特定组合不熟悉，或者被其他无关服务干扰。
+核心概念：FSx for Lustre是专为高性能计算设计的文件系统，能够与Amazon S3无缝集成，适合处理大量数据。scratch类型适用于临时数据存储，满足HPC工作负载的需求，而Elastic Fabric Adapter（EFA)是一种AWS定制网卡，支持OS bypass，为紧耦合计算提供极低的节点间通信延迟。
+决策规划：
+看到Tightly Coupled High Performance Computing或Low-Latency Inter-node Communication或类似关键词，立即联想到EFA。
+看到High Throughput Data Access或Large Data Sets或High Performance Parallel File System, Data Intensive Computing或类似关键词，立即联想到FSx for Lustre。
+架构原则：这是Performance Efficiency Pillar的典型应用，针对HPC专门构建的服务。
