@@ -1,0 +1,14 @@
+记录926：
+Fargate Spot是处理高峰流量的工具，但是它会造成服务的干扰。稳定的服务别用这个。
+
+记录474：
+VPC Peering是点对点的，多个VPC的时候，复杂度就上升了，我们需要减少管理工作，所以排除。
+Direct Connect gateway是用来链接设施和网络的，不是VPC之间关系
+PrivateLink是特定服务连接，不是一般通讯。
+Transit Gateway是hub的模式，自然可以管理多个VPC，然后Transit Gateway peering连接这些hubs，就可以连接这些VPC了。
+
+记录156：
+Global Accelerator是作用在TCP/UDP部分，跟资源缓存屁关系没有。CloudFront本身就是个CDN，自然可以弄缓存。既然是CDN，我们也可以限制敏感资源的获取方式，比如只能从CloudFront，不能从S3
+
+记录468：
+后端服务是处于私人VPC，所以不会有公开的endpoints，但是我们的API是公开服务。所以要访问私人资源，我们需要VPC Link。
